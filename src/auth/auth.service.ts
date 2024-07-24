@@ -7,7 +7,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtPayload } from './interfaces';
-import { OAuth2Client } from 'google-auth-library';
+import { OAuth2Client, TokenPayload } from 'google-auth-library';
 
 @Injectable()
 export class AuthService {
@@ -51,20 +51,28 @@ export class AuthService {
           email: true,
           password: true,
           id: true,
+          fullName: true,
+          imageUrl: true,
+          roles: true,
         },
       });
+      console.log({ user });
       if (!user) {
         throw new UnauthorizedException('Credenciales no validas');
       }
       if (!bcrypt.compareSync(password, user.password)) {
         throw new UnauthorizedException('Credenciales no validas');
       }
+      delete user.password
+      delete user.isActive
       return {
         ...user,
         token: this.getjwtToken({ id: user.id }),
       };
     } catch (error) {
-      this.handleDbErrors(error);
+      throw new BadRequestException(error.message);
+      // return error;
+      // this.handleDbErrors(error);
     }
   }
 
@@ -74,7 +82,6 @@ export class AuthService {
     return token;
   }
   async verifyGoogleToken(idToken: string) {
-    console.log(idToken)
     const ticket = await this.client.verifyIdToken({
       idToken,
       audience: [
@@ -82,10 +89,70 @@ export class AuthService {
         process.env.WEB_GOOGLE_CLIENT_ID,
       ],
     });
-    console.log({ ticket })
     const payload = ticket.getPayload();
     return payload;
   }
+
+  async renewToken(idToken: string) {
+    try {
+      // Verificar el token (aunque esté caducado)
+      const payload = this.jwtService.decode(idToken) as JwtPayload;
+
+      if (!payload || !payload.id) {
+        throw new UnauthorizedException('Token no válido');
+      }
+
+      const user = await this.getUserById(payload.id);
+
+      if (!user) {
+        throw new UnauthorizedException('Usuario no encontrado');
+      }
+
+      // Generar un nuevo token JWT
+      const newToken = this.getjwtToken({ id: user.id });
+
+      // Devolver el usuario y el nuevo token
+      delete user.password;
+      delete user.isActive;
+      return {
+        ...user,
+        token: newToken,
+      };
+    } catch (error) {
+      throw new UnauthorizedException('Token no válido');
+    }
+  }
+
+
+  //TokenPayload --> from auth-library
+  async findOrCreateGoogleUser(payload: TokenPayload) {
+    const { email, name, picture } = payload;
+    let user = await this.userRepository.findOne({ where: { email } });
+
+    if (!user) {
+      user = this.userRepository.create({
+        fullName: name,
+        email,
+        imageUrl: picture,
+        password: '', // No password for Google users
+        roles: ['user'],
+      });
+
+      try {
+        await this.userRepository.save(user);
+      } catch (error) {
+        this.handleDbErrors(error);
+      }
+    }
+    const token = this.getjwtToken({ id: user.id });
+    delete user.password
+    delete user.isActive
+    return {
+      ...user,
+      token,
+    };
+  }
+
   private handleDbErrors(error: any): never {
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);

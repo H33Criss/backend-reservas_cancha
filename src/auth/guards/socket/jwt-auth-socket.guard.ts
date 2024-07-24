@@ -19,7 +19,6 @@ export class JwtAuthSocketGuard implements CanActivate {
         if (!token) {
             throw new UnauthorizedException('Token not provided');
         }
-
         try {
             const decoded = this.jwtService.verify(token);
             const user = await this.userRepository.findOne({ where: { id: decoded.id } });
@@ -33,6 +32,7 @@ export class JwtAuthSocketGuard implements CanActivate {
             }
 
             client.data.user = user;  // Attach full user information to the socket instance
+            // console.log(`USUARIO SOCKET ${JSON.stringify(user)}`);
             return true;
         } catch (error) {
             throw new UnauthorizedException('Token not valid');

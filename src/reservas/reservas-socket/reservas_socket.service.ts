@@ -41,7 +41,7 @@ export class ReservasSocketService {
     const { start, end } = getStartAndEndOfWeek(newReserva.fechaReserva);
     if (this.wss) {
       const room = `reservas-${start}-${end}`;
-      console.log(`Room newReserva: ${room}`);
+      console.log(`Room AddReserva: ${room}`);
       this.wss.to(room).emit('nuevaReserva', newReserva);
     } else {
       console.error('WebSocket server not initialized');

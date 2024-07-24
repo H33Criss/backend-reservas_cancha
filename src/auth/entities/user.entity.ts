@@ -8,6 +8,8 @@ export class User {
 
   @Column('text')
   fullName: string;
+  @Column('text', { nullable: true })
+  imageUrl: string;
 
   @Column('text', {
     select: false,
@@ -25,7 +27,7 @@ export class User {
   })
   isActive: boolean;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @OneToMany(() => Reserva, (reserva) => reserva.user)

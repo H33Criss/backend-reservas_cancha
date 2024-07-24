@@ -29,7 +29,7 @@ export class ReservasSocketGateway {
     const data =
       await this.reservasSocketService.getReservasBySemana(getReservasDto);
     const room = `reservas-${getReservasDto.inicio}-${getReservasDto.fin}`;
-    console.log(`Room Reservas: ${room}`);
+    console.log(`Room Joined: ${room}`);
     client.join(room);
     client.emit('loadedReservas', data);
   }
