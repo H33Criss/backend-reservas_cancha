@@ -9,9 +9,9 @@ import {
   Query,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { ReservasService } from './reservas.service';
-import { CreateReservaDto } from './dto/create-reserva.dto';
-import { UpdateReservaDto } from './dto/update-reserva.dto';
+import { ReservasService } from './reservas_rest.service';
+import { CreateReservaDto } from '../dto/create-reserva.dto';
+import { UpdateReservaDto } from '../dto/update-reserva.dto';
 import { User } from 'src/auth/entities/user.entity';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { normalizeDates } from 'src/utils';

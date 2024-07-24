@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { forwardRef, Inject } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
-import { GetReservasDto } from './dto/get-reservas.dto';
+import { GetReservasDto } from '../dto/get-reservas.dto';
 import { Server } from 'socket.io';
 import { getStartAndEndOfWeek, normalizeDates } from 'src/utils';
-import { ReservasService } from '../reservas-rest/reservas.service';
-import { Reserva } from '../reservas-rest/entities/reserva.entity';
+import { ReservasService } from '../rest/reservas_rest.service';
 
 @Injectable()
 export class ReservasSocketService {

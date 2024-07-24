@@ -3,10 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
-import { ReservasModule } from './reservas/reservas-rest/reservas.module';
-import { ReservasSocketModule } from './reservas/reservas-socket/reservas_socket.module';
+
 import { BloqueoSocketModule } from './bloqueos/bloqueos-socket/bloqueos_socket.module';
 import { BloqueosModule } from './bloqueos/bloqueos-rest/bloqueos.module';
+import { ReservasModule } from './reservas/reservas.module';
 
 @Module({
   controllers: [],
@@ -24,11 +24,10 @@ import { BloqueosModule } from './bloqueos/bloqueos-rest/bloqueos.module';
       autoLoadEntities: true,
     }),
     ReservasModule,
-    ReservasSocketModule,
     BloqueosModule,
     BloqueoSocketModule,
     AuthModule,
     SeedModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

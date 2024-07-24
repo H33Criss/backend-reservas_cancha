@@ -6,17 +6,15 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import {
-  CreateReservaDto,
   CreateReservaServiceDto,
-} from './dto/create-reserva.dto';
-import { UpdateReservaDto } from './dto/update-reserva.dto';
+} from '../dto/create-reserva.dto';
+import { UpdateReservaDto } from '../dto/update-reserva.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Reserva } from './entities/reserva.entity';
+import { Reserva } from '../entities/reserva.entity';
 import { Between, Repository } from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
-import { AuthService } from 'src/auth/auth.service';
 import { BloqueosService } from 'src/bloqueos/bloqueos-rest/bloqueos.service';
-import { ReservasSocketService } from '../reservas-socket/reservas_socket.service';
+import { ReservasSocketService } from '../socket/reservas_socket.service';
 
 @Injectable()
 export class ReservasService {
@@ -24,7 +22,6 @@ export class ReservasService {
     @InjectRepository(Reserva)
     private readonly reservaRepository: Repository<Reserva>,
     private readonly bloqueosService: BloqueosService,
-    private readonly authService: AuthService,
     @Inject(forwardRef(() => ReservasSocketService))
     private readonly reservasSocketService: ReservasSocketService,
   ) { }

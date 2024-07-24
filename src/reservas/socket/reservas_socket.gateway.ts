@@ -5,7 +5,7 @@ import {
 } from '@nestjs/websockets';
 import { ReservasSocketService } from './reservas_socket.service';
 import { Server, Socket } from 'socket.io';
-import { GetReservasDto } from './dto/get-reservas.dto';
+import { GetReservasDto } from '../dto/get-reservas.dto';
 import { AuthSocket } from 'src/auth/decorators';
 import { WsExceptionLoggerFilter } from 'src/common/handle-exceptions/socket-logger-filter.exception';
 import { UseFilters } from '@nestjs/common';
