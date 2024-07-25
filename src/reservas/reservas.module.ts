@@ -1,8 +1,8 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reserva } from './entities/reserva.entity';
-import { AuthModule } from 'src/auth/auth.module';
-import { BloqueosModule } from 'src/bloqueos/bloqueos-rest/bloqueos.module';
+import { AuthModule } from '../auth/auth.module';
+import { BloqueosModule } from '../bloqueos/bloqueos-rest/bloqueos.module';
 import { ReservasController } from './rest/reservas_rest.controller';
 import { ReservasSocketService } from './socket/reservas_socket.service';
 import { ReservasSocketGateway } from './socket/reservas_socket.gateway';

@@ -3,8 +3,8 @@ import { initialData } from './data/seed-data';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../auth/entities/user.entity';
-import { BloqueosService } from 'src/bloqueos/bloqueos-rest/bloqueos.service';
-import { ReservasService } from 'src/reservas/rest/reservas_rest.service';
+import { BloqueosService } from '../bloqueos/bloqueos-rest/bloqueos.service';
+import { ReservasService } from '../reservas/rest/reservas_rest.service';
 
 @Injectable()
 export class SeedService {

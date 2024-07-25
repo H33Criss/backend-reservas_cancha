@@ -3,7 +3,7 @@ import { GetBloqueosDto } from './dto/get-bloqueos.dto';
 import { Server } from 'socket.io';
 import { BloqueosService } from '../bloqueos-rest/bloqueos.service';
 import { Bloqueo } from '../bloqueos-rest/entities/bloqueo.entity';
-import { getStartAndEndOfWeek } from 'src/utils';
+import { getStartAndEndOfWeek } from '../../utils';
 @Injectable()
 export class BloqueosSocketService {
   private wss: Server;
@@ -13,7 +13,7 @@ export class BloqueosSocketService {
   constructor(
     @Inject(forwardRef(() => BloqueosService))
     private readonly bloqueosService: BloqueosService,
-  ) {}
+  ) { }
   async getBloqueosBySemana(
     getBloqueosDto: GetBloqueosDto,
   ): Promise<Bloqueo[]> {

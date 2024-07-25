@@ -4,11 +4,11 @@ import {
   CreateBloqueoDto,
   CreateBloqueoServiceDto,
 } from './dto/create-bloqueo.dto';
-import { normalizeDates } from 'src/utils';
+import { normalizeDates } from '../../utils';
 
 @Controller('bloqueos')
 export class BloqueosController {
-  constructor(private readonly bloqueosService: BloqueosService) {}
+  constructor(private readonly bloqueosService: BloqueosService) { }
 
   @Post()
   create(@Body() createBloqueoDto: CreateBloqueoDto) {
@@ -16,24 +16,24 @@ export class BloqueosController {
       ...createBloqueoDto,
       dia: createBloqueoDto.dia
         ? normalizeDates.createDate(
-            parseInt(createBloqueoDto.dia.split('-')[0]),
-            parseInt(createBloqueoDto.dia.split('-')[1]),
-            parseInt(createBloqueoDto.dia.split('-')[2]),
-          )
+          parseInt(createBloqueoDto.dia.split('-')[0]),
+          parseInt(createBloqueoDto.dia.split('-')[1]),
+          parseInt(createBloqueoDto.dia.split('-')[2]),
+        )
         : undefined,
       semanaInicio: createBloqueoDto.semanaInicio
         ? normalizeDates.createDate(
-            parseInt(createBloqueoDto.semanaInicio.split('-')[0]),
-            parseInt(createBloqueoDto.semanaInicio.split('-')[1]),
-            parseInt(createBloqueoDto.semanaInicio.split('-')[2]),
-          )
+          parseInt(createBloqueoDto.semanaInicio.split('-')[0]),
+          parseInt(createBloqueoDto.semanaInicio.split('-')[1]),
+          parseInt(createBloqueoDto.semanaInicio.split('-')[2]),
+        )
         : undefined,
       semanaFin: createBloqueoDto.semanaFin
         ? normalizeDates.createDate(
-            parseInt(createBloqueoDto.semanaFin.split('-')[0]),
-            parseInt(createBloqueoDto.semanaFin.split('-')[1]),
-            parseInt(createBloqueoDto.semanaFin.split('-')[2]),
-          )
+          parseInt(createBloqueoDto.semanaFin.split('-')[0]),
+          parseInt(createBloqueoDto.semanaFin.split('-')[1]),
+          parseInt(createBloqueoDto.semanaFin.split('-')[2]),
+        )
         : undefined,
     };
 

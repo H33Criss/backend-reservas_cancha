@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
 import { GetReservasBySemanaDto } from '../dto/get-reservas-by-semana.dto';
 import { Server } from 'socket.io';
-import { getStartAndEndOfWeek, normalizeDates } from 'src/utils';
+import { getStartAndEndOfWeek, normalizeDates } from '../../utils';
 import { ReservasService } from '../rest/reservas_rest.service';
 import { GetReservasByUserDto } from '../dto/get-reservas-by-user.dto';
 

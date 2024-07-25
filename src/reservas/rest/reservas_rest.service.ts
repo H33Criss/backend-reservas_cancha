@@ -12,8 +12,8 @@ import { UpdateReservaDto } from '../dto/update-reserva.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reserva } from '../entities/reserva.entity';
 import { Between, MoreThanOrEqual, Repository } from 'typeorm';
-import { User } from 'src/auth/entities/user.entity';
-import { BloqueosService } from 'src/bloqueos/bloqueos-rest/bloqueos.service';
+import { User } from '../../auth/entities/user.entity';
+import { BloqueosService } from '../../bloqueos/bloqueos-rest/bloqueos.service';
 import { ReservasSocketService } from '../socket/reservas_socket.service';
 
 @Injectable()

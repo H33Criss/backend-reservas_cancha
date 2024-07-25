@@ -12,10 +12,10 @@ import {
 import { ReservasService } from './reservas_rest.service';
 import { CreateReservaDto } from '../dto/create-reserva.dto';
 import { UpdateReservaDto } from '../dto/update-reserva.dto';
-import { User } from 'src/auth/entities/user.entity';
-import { GetUser } from 'src/auth/decorators/get-user.decorator';
-import { normalizeDates } from 'src/utils';
-import { Auth } from 'src/auth/decorators';
+import { User } from '../../auth/entities/user.entity';
+import { GetUser } from '../../auth/decorators/get-user.decorator';
+import { normalizeDates } from '../../utils';
+import { Auth } from '../../auth/decorators';
 
 @Controller('reservas')
 @Auth() // --> Este decorador habilita que funcione el @GetUser() de abajo

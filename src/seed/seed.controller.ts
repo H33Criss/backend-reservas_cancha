@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 import { SeedService } from './seed.service';
-import { Auth } from 'src/auth/decorators';
-import { ValidRoles } from 'src/auth/interfaces';
+import { Auth } from '../auth/decorators';
+import { ValidRoles } from '../auth/interfaces';
 
-// @Auth(ValidRoles.admin, ValidRoles.superUser)
+@Auth(ValidRoles.admin, ValidRoles.superUser)
 
 @Controller('seed')
 @Auth()
@@ -13,6 +13,7 @@ export class SeedController {
   @Get('/')
   @Auth(ValidRoles.admin, ValidRoles.superUser)
   executeSeed() {
+    if (process.env.STAGE === 'prod') return;
     return this.seedService.runSeed();
   }
 }

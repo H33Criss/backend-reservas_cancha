@@ -1,4 +1,4 @@
-import { Reserva } from 'src/reservas/entities/reserva.entity';
+import { Reserva } from '../../reservas/entities/reserva.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()

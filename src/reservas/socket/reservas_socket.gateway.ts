@@ -6,11 +6,10 @@ import {
 import { ReservasSocketService } from './reservas_socket.service';
 import { Server, Socket } from 'socket.io';
 import { GetReservasBySemanaDto } from '../dto/get-reservas-by-semana.dto';
-import { AuthSocket, GetUser } from 'src/auth/decorators';
-import { WsExceptionLoggerFilter } from 'src/common/handle-exceptions/socket-logger-filter.exception';
+import { AuthSocket, GetUser } from '../../auth/decorators';
+import { WsExceptionLoggerFilter } from '../../common/handle-exceptions/socket-logger-filter.exception';
 import { UseFilters } from '@nestjs/common';
 import { GetReservasByUserDto } from '../dto/get-reservas-by-user.dto';
-import { User } from 'src/auth/entities/user.entity';
 
 @AuthSocket()
 @WebSocketGateway({ cors: true, namespace: 'reservas' })

@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { normalizeDates } from 'src/utils';
+import { normalizeDates } from '../../utils';
 
 interface SeedReserva {
   diaSemana: string;
