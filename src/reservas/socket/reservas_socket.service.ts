@@ -1,9 +1,11 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 
-import { GetReservasDto } from '../dto/get-reservas.dto';
+import { GetReservasBySemanaDto } from '../dto/get-reservas-by-semana.dto';
 import { Server } from 'socket.io';
 import { getStartAndEndOfWeek, normalizeDates } from 'src/utils';
 import { ReservasService } from '../rest/reservas_rest.service';
+import { GetReservasByUserDto } from '../dto/get-reservas-by-user.dto';
+
 
 @Injectable()
 export class ReservasSocketService {
@@ -16,8 +18,8 @@ export class ReservasSocketService {
     private readonly reservasService: ReservasService,
   ) { }
 
-  async getReservasBySemana(getReservasDto: GetReservasDto) {
-    const { inicio, fin } = getReservasDto;
+  async getReservasBySemana(GetReservasBySemanaDto: GetReservasBySemanaDto) {
+    const { inicio, fin } = GetReservasBySemanaDto;
 
     const reservas = await this.reservasService.getReservasBySemana(
       normalizeDates.createDate(
@@ -39,11 +41,23 @@ export class ReservasSocketService {
     const { start, end } = getStartAndEndOfWeek(newReserva.fechaReserva);
     if (this.wss) {
       const room = `reservas-${start}-${end}`;
-      console.log(`Room AddReserva: ${room}`);
-      this.wss.to(room).emit('nuevaReserva', newReserva);
+      const roomUser = `user-${newReserva.user}`;
+      this.wss.to(room).emit('newReservaOfAny', newReserva);
+      this.wss.to(roomUser).emit(`newReservaOfUser`, newReserva);
     } else {
       console.error('WebSocket server not initialized');
     }
     // return newReserva;
+  }
+
+  async findByUser(getReservasByUserDto: GetReservasByUserDto) {
+    const { userId, today } = getReservasByUserDto;
+    const todayFormated = normalizeDates.createDate(
+      parseInt(today.split('-')[0]),
+      parseInt(today.split('-')[1]),
+      parseInt(today.split('-')[2]),
+    );
+    const reservas = await this.reservasService.findAllByUserAndDate(userId, todayFormated);
+    return reservas;
   }
 }

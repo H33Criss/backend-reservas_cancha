@@ -11,7 +11,7 @@ import {
 import { UpdateReservaDto } from '../dto/update-reserva.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reserva } from '../entities/reserva.entity';
-import { Between, Repository } from 'typeorm';
+import { Between, MoreThanOrEqual, Repository } from 'typeorm';
 import { User } from 'src/auth/entities/user.entity';
 import { BloqueosService } from 'src/bloqueos/bloqueos-rest/bloqueos.service';
 import { ReservasSocketService } from '../socket/reservas_socket.service';
@@ -46,15 +46,8 @@ export class ReservasService {
     createReservaServiceDto: CreateReservaServiceDto,
     user: User,
   ): Promise<ReservaResponse> {
-    // let userReserva: User;
-    const { fechaReserva } = createReservaServiceDto;
-    // userReserva = user;
 
-    // if (!user) {
-    //   userReserva = await this.authService.getUserById(
-    //     '1a5cdd79-4efa-44b1-9f90-8689926d0e19',
-    //   );
-    // }
+    const { fechaReserva } = createReservaServiceDto;
 
 
     // Verifica si el día está bloqueado
@@ -83,6 +76,25 @@ export class ReservasService {
     } catch (error) {
       this.handleDbExceptions(error);
     }
+  }
+  async findAllByUserAndDate(userId: string, today: Date) {
+    const reservasData = await this.reservaRepository.find({
+      where: {
+        user: { id: userId },
+        fechaReserva: MoreThanOrEqual(today)
+      },
+      order: {
+        fechaReserva: 'ASC',
+        horaInicio: 'ASC'
+      },
+      relations: ['user']
+    });
+
+    const reservas = reservasData.map((reserva) => ({
+      ...reserva,
+      user: reserva.user.id,
+    }));
+    return reservas;
   }
 
   findAllByUser(uid: string) {

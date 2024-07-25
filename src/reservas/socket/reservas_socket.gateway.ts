@@ -5,10 +5,12 @@ import {
 } from '@nestjs/websockets';
 import { ReservasSocketService } from './reservas_socket.service';
 import { Server, Socket } from 'socket.io';
-import { GetReservasDto } from '../dto/get-reservas.dto';
-import { AuthSocket } from 'src/auth/decorators';
+import { GetReservasBySemanaDto } from '../dto/get-reservas-by-semana.dto';
+import { AuthSocket, GetUser } from 'src/auth/decorators';
 import { WsExceptionLoggerFilter } from 'src/common/handle-exceptions/socket-logger-filter.exception';
 import { UseFilters } from '@nestjs/common';
+import { GetReservasByUserDto } from '../dto/get-reservas-by-user.dto';
+import { User } from 'src/auth/entities/user.entity';
 
 @AuthSocket()
 @WebSocketGateway({ cors: true, namespace: 'reservas' })
@@ -23,14 +25,23 @@ export class ReservasSocketGateway {
     this.reservasSocketService.setServer(server);
   }
 
-  @SubscribeMessage('loadReservas')
-  // @AuthSocket(ValidRoles.admin)
-  async findAll(client: Socket, getReservasDto: GetReservasDto) {
+  @SubscribeMessage('reservasOfAny')
+  // @AuthSocket()
+  async findAll(client: Socket, getReservasBySemanaDto: GetReservasBySemanaDto) {
     const data =
-      await this.reservasSocketService.getReservasBySemana(getReservasDto);
-    const room = `reservas-${getReservasDto.inicio}-${getReservasDto.fin}`;
-    console.log(`Room Joined: ${room}`);
+      await this.reservasSocketService.getReservasBySemana(getReservasBySemanaDto);
+
+    const room = `reservas-${getReservasBySemanaDto.inicio}-${getReservasBySemanaDto.fin}`;
     client.join(room);
-    client.emit('loadedReservas', data);
+    client.emit('loadReservasOfAny', data);
   }
+  @SubscribeMessage('reservasOfUser')
+  async findByUser(client: Socket, getReservasByUserDto: GetReservasByUserDto) {
+    const data = await this.reservasSocketService.findByUser(getReservasByUserDto);
+    const roomUser = `user-${getReservasByUserDto.userId}`;
+    client.join(roomUser);
+    client.emit('loadReservasOfUser', data);
+  }
+
+
 }

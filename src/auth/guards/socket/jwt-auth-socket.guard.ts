@@ -32,7 +32,7 @@ export class JwtAuthSocketGuard implements CanActivate {
             }
 
             client.data.user = user;  // Attach full user information to the socket instance
-            // console.log(`USUARIO SOCKET ${JSON.stringify(user)}`);
+            // console.log(`USUARIO SOCKET ${JSON.stringify(user.id)}`);
             return true;
         } catch (error) {
             throw new UnauthorizedException('Token not valid');
