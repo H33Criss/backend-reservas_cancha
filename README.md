@@ -48,8 +48,8 @@ yarn install
 docker compose up -D
 ```
 
-6. Levantar el proyecto
+6. Levantar el proyecto( developer)
 
 ```bash
-yarn dev
+yarn start:dev
 ```
