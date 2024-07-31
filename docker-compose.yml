@@ -11,3 +11,34 @@ services:
     container_name: pobladbApi
     volumes:
       - ./postgres:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  backend:
+    image: pobla-backend:v1
+    container_name: pobla-ackend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      POSTGRES_HOST: db
+      DB_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+      STAGE: ${STAGE}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: ${PORT}
+      HOST_API: ${HOST_API}
+      FLUTTER_GOOGLE_CLIENT_ID: ${FLUTTER_GOOGLE_CLIENT_ID}
+      WEB_GOOGLE_CLIENT_ID: ${WEB_GOOGLE_CLIENT_ID}
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

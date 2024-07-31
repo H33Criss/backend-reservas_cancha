@@ -14,11 +14,11 @@ import { ReservasModule } from './reservas/reservas.module';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      ssl: process.env.STAGE === 'prod',
-      extra: {
-        ssl:
-          process.env.STAGE === 'prod' ? { rejectUnauthorized: false } : null,
-      },
+      // ssl: process.env.STAGE === 'prod',
+      // extra: {
+      //   ssl:
+      //     process.env.STAGE === 'prod' ? { rejectUnauthorized: false } : null,
+      // },
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
       port: parseInt(process.env.DB_PORT),

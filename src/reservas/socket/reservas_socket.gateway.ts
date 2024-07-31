@@ -24,7 +24,7 @@ export class ReservasSocketGateway {
     this.reservasSocketService.setServer(server);
   }
 
-  @SubscribeMessage('reservasOfAny')
+  @SubscribeMessage('reservasHorario')
   // @AuthSocket()
   async findAll(client: Socket, getReservasBySemanaDto: GetReservasBySemanaDto) {
     const data =
@@ -32,14 +32,14 @@ export class ReservasSocketGateway {
 
     const room = `reservas-${getReservasBySemanaDto.inicio}-${getReservasBySemanaDto.fin}`;
     client.join(room);
-    client.emit('loadReservasOfAny', data);
+    client.emit('loadReservasHorario', data);
   }
-  @SubscribeMessage('reservasOfUser')
+  @SubscribeMessage('reservasProximas')
   async findByUser(client: Socket, getReservasByUserDto: GetReservasByUserDto) {
     const data = await this.reservasSocketService.findByUser(getReservasByUserDto);
     const roomUser = `user-${getReservasByUserDto.userId}`;
     client.join(roomUser);
-    client.emit('loadReservasOfUser', data);
+    client.emit('loadReservasProximas', data);
   }
 
 

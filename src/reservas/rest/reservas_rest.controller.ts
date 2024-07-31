@@ -60,13 +60,13 @@ export class ReservasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reservasService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.reservasService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReservaDto: UpdateReservaDto) {
-    return this.reservasService.update(+id, updateReservaDto);
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateReservaDto: UpdateReservaDto) {
+    return this.reservasService.update(id, updateReservaDto);
   }
 
   @Delete(':id')

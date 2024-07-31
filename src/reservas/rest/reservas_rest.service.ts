@@ -4,6 +4,7 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   CreateReservaServiceDto,
@@ -109,13 +110,38 @@ export class ReservasService {
     return `This action returns all reservas`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} reserva`;
+  async findOne(id: string) {
+    const reserva = await this.reservaRepository.findOne({ where: { id }, relations: ['user'] });
+    return {
+      ...reserva,
+      user: reserva.user.id,
+    };
   }
 
-  update(id: number, updateReservaDto: UpdateReservaDto) {
-    return `This action updates a #${id} reserva`;
+  async update(id: string, updateReservaDto: UpdateReservaDto) {
+    // Obtener la reserva existente con las relaciones necesarias
+    const reservaToUpdate = await this.reservaRepository.findOne({ where: { id }, relations: ['user'] });
+
+    if (!reservaToUpdate) {
+      throw new NotFoundException(`Reserva with ID ${id} not found`);
+    }
+
+    // Actualizar la reserva con los nuevos datos
+    Object.assign(reservaToUpdate, updateReservaDto);
+    await this.reservaRepository.save(reservaToUpdate);
+
+    // Recargar la entidad para asegurarse de que las relaciones se actualicen correctamente
+    const updatedReserva = await this.reservaRepository.findOne({ where: { id }, relations: ['user'] });
+    //Modificar la respuesta de la reserva
+    const reserva = {
+      ...updatedReserva,
+      user: updatedReserva.user.id,
+    };
+    //Notificar actualizacion por sockets
+    await this.reservasSocketService.updateReserva(reserva);
+    return reserva;
   }
+
 
   remove(id: number) {
     return `This action removes a #${id} reserva`;

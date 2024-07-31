@@ -3,10 +3,9 @@ import { SeedService } from './seed.service';
 import { Auth } from '../auth/decorators';
 import { ValidRoles } from '../auth/interfaces';
 
-@Auth(ValidRoles.admin, ValidRoles.superUser)
 
 @Controller('seed')
-@Auth()
+@Auth(ValidRoles.admin, ValidRoles.superUser)
 export class SeedController {
   constructor(private readonly seedService: SeedService) { }
 
