@@ -24,6 +24,10 @@
 
 ## Getting Started
 
+`Node version 22.3.0`
+
+##
+
 1. Clonar el repositorio.
 
 2. Tener instalado `yarn`, sino instalarlo con:
