@@ -35,11 +35,18 @@ export class ReservasSocketGateway {
     client.emit('loadReservasHorario', data);
   }
   @SubscribeMessage('reservasProximas')
-  async findByUser(client: Socket, getReservasByUserDto: GetReservasByUserDto) {
-    const data = await this.reservasSocketService.findByUser(getReservasByUserDto);
+  async findByUserProximasReservas(client: Socket, getReservasByUserDto: GetReservasByUserDto) {
+    const data = await this.reservasSocketService.findByUser(getReservasByUserDto, false);
     const roomUser = `user-${getReservasByUserDto.userId}`;
     client.join(roomUser);
     client.emit('loadReservasProximas', data);
+  }
+  @SubscribeMessage('reservasTotales')
+  async findByUserAllReservas(client: Socket, getReservasByUserDto: GetReservasByUserDto) {
+    const data = await this.reservasSocketService.findByUser(getReservasByUserDto, true);
+    const roomUser = `user-${getReservasByUserDto.userId}`;
+    client.join(roomUser);
+    client.emit('loadReservasTotales', data);
   }
 
 

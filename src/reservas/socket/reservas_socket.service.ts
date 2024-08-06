@@ -44,6 +44,7 @@ export class ReservasSocketService {
       const roomUser = `user-${newReserva.user}`;
       this.wss.to(room).emit('newReservaHorario', newReserva);
       this.wss.to(roomUser).emit(`newReservaProxima`, newReserva);
+      this.wss.to(roomUser).emit(`newReserva-${newReserva.user}`, newReserva);
     } else {
       console.error('WebSocket server not initialized');
     }
@@ -53,13 +54,19 @@ export class ReservasSocketService {
 
     if (this.wss) {
       this.wss.emit(`reserva-${updatedReserva.id}`, updatedReserva);
+      this.wss.emit(`update-${updatedReserva.user}-reserva`, updatedReserva);
     } else {
       console.error('WebSocket server not initialized');
     }
   }
 
-  async findByUser(getReservasByUserDto: GetReservasByUserDto) {
+  async findByUser(getReservasByUserDto: GetReservasByUserDto, getAll: boolean) {
     const { userId, today } = getReservasByUserDto;
+
+    if (getAll) {
+      const reservas = await this.reservasService.findAllByUser(userId);
+      return reservas;
+    }
     const todayFormated = normalizeDates.createDate(
       parseInt(today.split('-')[0]),
       parseInt(today.split('-')[1]),

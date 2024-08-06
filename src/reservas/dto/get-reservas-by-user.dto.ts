@@ -1,4 +1,4 @@
-import { IsDateString, IsUUID } from "class-validator";
+import { IsDateString, IsOptional, IsUUID } from "class-validator";
 
 
 export class GetReservasByUserDto {
@@ -6,5 +6,6 @@ export class GetReservasByUserDto {
     userId: string;
 
     @IsDateString()
+    @IsOptional()
     today: string;
 }

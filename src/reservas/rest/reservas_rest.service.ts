@@ -98,13 +98,18 @@ export class ReservasService {
     return reservas;
   }
 
-  findAllByUser(uid: string) {
-    return this.reservaRepository.find({
+  async findAllByUser(uid: string) {
+    const reservasData = await this.reservaRepository.find({
       where: {
         user: { id: uid },
       },
-      // relations: ['user'], // Incluye las relaciones si necesitas más detalles
+      relations: ['user']
     });
+    const reservas = reservasData.map((reserva) => ({
+      ...reserva,
+      user: reserva.user.id,
+    }));
+    return reservas;
   }
   findAll() {
     return `This action returns all reservas`;
